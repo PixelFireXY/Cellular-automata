@@ -23,10 +23,13 @@ public class CellBehaviour : MonoBehaviour
         {
             isCellAlive = value;
 
-            CellColor = isCellAlive ? Color.white : Color.black;
+            CellColor = isCellAlive ? Color.black : Color.white;
         }
     }
     private bool isCellAlive;
+
+    public Vector2Int CellIndexPos { get; set; }
+
 
     [SerializeField]
     private SpriteRenderer spriteRenderer = null;

@@ -1,8 +1,10 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Wiki document: https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
+/// </summary>
 public class CellsManager : MonoBehaviour
 {
     private bool[,] currCells;                                  // The cells of the current life cycle.
@@ -21,6 +23,8 @@ public class CellsManager : MonoBehaviour
 
     private readonly float cycleRefreshRate = 0.5f;
 
+    private bool isLifeCyclePaused = false;
+
     private void Awake()
     {
         InitializeArrays();
@@ -28,6 +32,16 @@ public class CellsManager : MonoBehaviour
         InstantiateCells();
 
         StartCoroutine(CellsLifeCicler());
+    }
+
+    private void OnEnable()
+    {
+        UserInput.onCellClicked += OnCellClicked;
+    }
+
+    private void OnDisable()
+    {
+        UserInput.onCellClicked -= OnCellClicked;
     }
 
     /// <summary>
@@ -65,9 +79,10 @@ public class CellsManager : MonoBehaviour
 
                 CellBehaviour cell = Instantiate(cellPrefab, new Vector3(currCellPosX, currCellPosY), Quaternion.identity, cellsParent);
 
-                // Set default color, name and value
-                cell.CellColor = Color.black;
+                // Set default color, name, index and value
+                cell.CellColor = Color.white;
                 cell.transform.name = $"Cell({x},{y})";
+                cell.CellIndexPos = new Vector2Int(x, y);
                 cellsArray[x, y] = cell;
             }
         }
@@ -86,8 +101,6 @@ public class CellsManager : MonoBehaviour
 
         // Reset the new grid
         newCells = new bool[cellGridSize.x, cellGridSize.y];
-
-        Debug.Log($"New cycle");
     }
 
     /// <summary>
@@ -170,6 +183,8 @@ public class CellsManager : MonoBehaviour
         {
             yield return new WaitForSeconds(cycleRefreshRate);
 
+            yield return new WaitUntil(() => isLifeCyclePaused);
+
             // Refresh every cell in the grid
             for (int y = 0; y < cellIndexY; y++)
             {
@@ -184,4 +199,14 @@ public class CellsManager : MonoBehaviour
             NextCicle();
         }
     }
+
+    public void OnCellClicked(Vector2Int cellIndex)
+    {
+        bool cellStatus = currCells[cellIndex.x, cellIndex.y];
+
+        currCells[cellIndex.x, cellIndex.y] = !cellStatus;
+        SetCellStatus(cellIndex, !cellStatus);
+    }
+
+    public void ToggleLifeCycleStatus() => isLifeCyclePaused = !isLifeCyclePaused;
 }
