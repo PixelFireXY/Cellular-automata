@@ -509,8 +509,7 @@ MonoBehaviour:
   cellPrefab: {fileID: -287311515448255769, guid: 9e5ed5dcd8a6fbe4e92e78f6433f3dc2,
     type: 3}
   cellsParent: {fileID: 1542184823}
-  gridSizeX: 50
-  gridSizeY: 50
+  cellGridSize: {x: 50, y: 50}
 --- !u!4 &1919932625
 Transform:
   m_ObjectHideFlags: 0
