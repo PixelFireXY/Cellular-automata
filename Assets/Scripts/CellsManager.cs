@@ -21,7 +21,8 @@ public class CellsManager : MonoBehaviour
     [SerializeField]
     private Vector2Int cellGridSize = new Vector2Int(10, 10);   // The size of the grid.
 
-    private readonly float cycleRefreshRate = 0.5f;
+    [SerializeField]
+    private float cycleRefreshRate = 0.05f;
 
     private bool isLifeCyclePaused = false;
 
