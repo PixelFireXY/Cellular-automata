@@ -2,13 +2,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UserInput : MonoBehaviour
 {
     public static Action<Vector2Int> onCellClicked;
+    public static Action onPauseButtonClicked;
 
     [SerializeField]
     private Camera cameraRaycast = null;
+
+    [SerializeField]
+    private Text pauseButtonText = null;
 
     private void Update()
     {
@@ -28,5 +33,15 @@ public class UserInput : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void PauseLifeCycle()
+    {
+        onPauseButtonClicked?.Invoke();
+
+        if (pauseButtonText.text == ">")
+            pauseButtonText.text = "||";
+        else
+            pauseButtonText.text = ">";
     }
 }

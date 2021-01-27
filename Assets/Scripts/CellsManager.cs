@@ -36,13 +36,25 @@ public class CellsManager : MonoBehaviour
 
     private void OnEnable()
     {
-        UserInput.onCellClicked += OnCellClicked;
+        SubscribeToEvents();
     }
 
     private void OnDisable()
     {
-        UserInput.onCellClicked -= OnCellClicked;
+        UnsubscribeToEvents();
     }
+
+    private void SubscribeToEvents()
+    {
+        UserInput.onCellClicked += OnCellClicked;
+        UserInput.onPauseButtonClicked += ToggleLifeCycleStatus;
+    }
+    private void UnsubscribeToEvents()
+    {
+        UserInput.onCellClicked -= OnCellClicked;
+        UserInput.onPauseButtonClicked -= ToggleLifeCycleStatus;
+    }
+
 
     /// <summary>
     /// Initialize all arrays for the cells grid.
@@ -200,6 +212,8 @@ public class CellsManager : MonoBehaviour
         }
     }
 
+    private void ToggleLifeCycleStatus() => isLifeCyclePaused = !isLifeCyclePaused;
+
     public void OnCellClicked(Vector2Int cellIndex)
     {
         bool cellStatus = currCells[cellIndex.x, cellIndex.y];
@@ -207,6 +221,4 @@ public class CellsManager : MonoBehaviour
         currCells[cellIndex.x, cellIndex.y] = !cellStatus;
         SetCellStatus(cellIndex, !cellStatus);
     }
-
-    public void ToggleLifeCycleStatus() => isLifeCyclePaused = !isLifeCyclePaused;
 }
